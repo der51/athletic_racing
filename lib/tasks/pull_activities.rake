@@ -5,12 +5,24 @@ namespace :strava do
 		today = Date.new(2016, 3, 9)
 		puts "Today is #{today}"
 		stages = Stage.all
-=begin	
-		client = Strava::Api::V3::Client.new(:access_token => '9f874434ae7ac4498258620d1a9d3d663aa4e4b0')
+
+		client = Strava::Api::V3::Client.new(:access_token => client.access_token)
 		results = client.list_athlete_activities
+
+=begin
+		#open("activity.json", "w") do |f|
+		#	f.puts results 
+		#end
+
 		results.each do |r|
 			start_date = Date.parse(r["start_date"])
-			puts start_date >= today
+			if start_date >= today
+				puts start_date 
+				activity = client.retrieve_an_activity(r["id"])
+				open(r["id"].to_s + ".json", "w") do |f|
+					f.puts activity 
+				end
+			end
 		end
 =end
 
@@ -55,6 +67,6 @@ namespace :strava do
 					update_points(stage.race, stage)
 				end
 			end
-		end
+		end		
 	end
 end
